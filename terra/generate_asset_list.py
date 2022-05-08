@@ -96,7 +96,7 @@ async def generate() -> dict[str, Any]:
     }
 
     with open(SAVE_PATH / "assetlist.json", "w", encoding="utf-8") as assetlist_f:
-        json.dump(assetlist, assetlist_f, indent=4, sort_keys=True)
+        json.dump(assetlist, assetlist_f, indent=2)
 
     jsonschema.validate(assetlist, ASSETLIST_SCHEMA)
 
