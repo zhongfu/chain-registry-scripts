@@ -9,9 +9,9 @@ import aiohttp
 TERRA_TOKEN_IMAGE_PNG_URL_BASE = "https://github.com/terra-money/assets/raw/master/icon/600"
 TERRA_TOKEN_IMAGE_SVG_URL_BASE = "https://github.com/terra-money/assets/raw/master/icon/svg"
 
-TERRA_FCD_URL = "https://fcd.terra.dev"
+TERRA_LCD_URL = "https://lcd.terra.dev"
 
-TERRA_NATIVE_TOKEN_METADATA_URL = f"{TERRA_FCD_URL}/cosmos/bank/v1beta1/denoms_metadata"
+TERRA_NATIVE_TOKEN_METADATA_URL = f"{TERRA_LCD_URL}/cosmos/bank/v1beta1/denoms_metadata"
 
 
 def get_image_url(symbol: str, filetype: str) -> str:
