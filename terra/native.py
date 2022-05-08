@@ -34,7 +34,7 @@ def get_image_url(symbol: str, filetype: str) -> str:
 async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[str, Any]:
     """
     tidies up data, e.g.:
-    - names: "USD TERRA" -> "TerraUSD"
+    - names: "USD TERRA" -> "TerraUSD", "LUNA" -> "Luna"
     - description: for stablecoins, "The USD stablecoin of Terra."; for others, "of the Terra Columbus." -> "of Terra."
     - icons: adds icons
     """
@@ -43,6 +43,8 @@ async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[st
     is_stablecoin = token["name"].endswith(" TERRA")
     if is_stablecoin:
         token["name"] = f"Terra{token['symbol']}"
+    elif token["name"] == "LUNA":
+        token["name"] = "Luna"
 
     if is_stablecoin:
         token["description"] = f"The {token['symbol']} stablecoin of Terra."
