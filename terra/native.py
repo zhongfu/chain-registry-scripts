@@ -42,12 +42,13 @@ async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[st
 
     is_stablecoin = token["name"].endswith(" TERRA")
     if is_stablecoin:
+        actual_currency_symbol = token["name"].split(" ", 1)[0]
         token["name"] = f"Terra{token['symbol']}"
     elif token["name"] == "LUNA":
         token["name"] = "Luna"
 
     if is_stablecoin:
-        token["description"] = f"The {token['symbol']} stablecoin of Terra."
+        token["description"] = f"The {actual_currency_symbol} stablecoin of Terra."
     else:
         token["description"] = token["description"].replace(" of the Terra Columbus.", " of Terra.")
 
