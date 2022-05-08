@@ -6,20 +6,29 @@ from typing import Any
 import aiohttp
 
 
-TERRA_TOKEN_IMAGE_URL_BASE = "https://github.com/terra-money/assets/raw/master/icon/600"
+TERRA_TOKEN_IMAGE_PNG_URL_BASE = "https://github.com/terra-money/assets/raw/master/icon/600"
+TERRA_TOKEN_IMAGE_SVG_URL_BASE = "https://github.com/terra-money/assets/raw/master/icon/svg"
 
 TERRA_FCD_URL = "https://fcd.terra.dev"
 
 TERRA_NATIVE_TOKEN_METADATA_URL = f"{TERRA_FCD_URL}/cosmos/bank/v1beta1/denoms_metadata"
 
 
-def get_image_url(symbol: str) -> str:
-    if symbol == "LUNA":
-        filename = "Luna"
-    else:
-        filename = f"{symbol}"
+def get_image_url(symbol: str, filetype: str) -> str:
+    assert filetype in ("svg", "png"), f"invalid filetype {filetype}"
 
-    return f"{TERRA_TOKEN_IMAGE_URL_BASE}/{filename}.png"
+    if symbol == "LUNA":
+        path_part = "Luna"
+    else:
+        if filetype == "svg":
+            path_part = f"Terra/{symbol}"
+        else:
+            path_part = symbol
+
+    if filetype == "png":
+        return f"{TERRA_TOKEN_IMAGE_PNG_URL_BASE}/{path_part}.{filetype}"
+    else: # svg
+        return f"{TERRA_TOKEN_IMAGE_SVG_URL_BASE}/{path_part}.{filetype}"
 
 
 async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[str, Any]:
@@ -40,15 +49,10 @@ async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[st
     else:
         token["description"] = token["description"].replace(" of the Terra Columbus.", " of Terra.")
 
-    icon = get_image_url(token["symbol"])
-    if icon.endswith(".svg"):
-        token["logo_URIs"] = {
-            "svg": icon
-        }
-    elif icon.endswith(".png"):
-        token["logo_URIs"] = {
-            "png": icon
-        }
+    token["logo_URIs"] = {
+        "svg": get_image_url(token["symbol"], "svg"),
+        "png": get_image_url(token["symbol"], "png")
+    }
 
     return token
 
