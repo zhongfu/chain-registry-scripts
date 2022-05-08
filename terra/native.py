@@ -45,8 +45,7 @@ async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[st
     is_stablecoin = token["name"].endswith(" TERRA")
     if is_stablecoin:
         actual_currency_symbol = token["name"].split(" ", 1)[0]
-
-        token["name"] = f"Terra{token['symbol']}"
+        token["name"] = f"Terra{actual_currency_symbol}"
 
         denoms_with_actual_symbol = list(filter(lambda du: du["denom"] == actual_currency_symbol.lower(), token["denom_units"]))
         assert len(denoms_with_actual_symbol) <= 1, f"{token['symbol']}: more than one denom_unit with the same symbol"
