@@ -37,13 +37,23 @@ async def generate_terra_native_asset_dict(token_raw: dict[str, Any]) -> dict[st
     - names: "USD TERRA" -> "TerraUSD", "LUNA" -> "Luna"
     - description: for stablecoins, "The USD stablecoin of Terra."; for others, "of the Terra Columbus." -> "of Terra."
     - icons: adds icons
+    - denoms: for stablecoins, usd -> ust, etc
+    - display: for stablecoins, usd -> ust, etc
     """
     token = token_raw.copy()
 
     is_stablecoin = token["name"].endswith(" TERRA")
     if is_stablecoin:
         actual_currency_symbol = token["name"].split(" ", 1)[0]
+
         token["name"] = f"Terra{token['symbol']}"
+
+        denoms_with_actual_symbol = list(filter(lambda du: du["denom"] == actual_currency_symbol.lower(), token["denom_units"]))
+        assert len(denoms_with_actual_symbol) <= 1, f"{token['symbol']}: more than one denom_unit with the same symbol"
+        if len(denoms_with_actual_symbol) == 1:
+            denoms_with_actual_symbol[0]["denom"] = token["symbol"].lower()
+
+        token["display"] = token["symbol"].lower()
     elif token["name"] == "LUNA":
         token["name"] = "Luna"
 

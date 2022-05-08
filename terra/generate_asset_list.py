@@ -21,7 +21,6 @@ SAVE_PATH = Path("gen")
 (SAVE_PATH / "images").mkdir(parents=True, exist_ok=True)
 
 
-
 async def download_images(tokens: dict[str, Any]):
     urls_paths = []
 
