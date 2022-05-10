@@ -74,7 +74,8 @@ async def generate_terra_cw20_asset_dict(addr: str, token_raw: dict[str, Any]) -
         raise Exception(f"couldn't get token info for {addr}: addr doesn't exist on-chain")
 
     base = f"cw20:{addr}"
-    display = token_raw["symbol"].lower()
+    symbol = token_raw["symbol"].removesuffix(" (Delisted)")
+    display = symbol.lower()
 
     denom_units = [
         {
@@ -96,7 +97,7 @@ async def generate_terra_cw20_asset_dict(addr: str, token_raw: dict[str, Any]) -
         base=base,
         name=name,
         display=display,
-        symbol=token_raw["symbol"]
+        symbol=symbol
     )
 
     icon = token_raw["icon"]
